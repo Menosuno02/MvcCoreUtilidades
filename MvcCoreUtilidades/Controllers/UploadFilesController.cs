@@ -4,6 +4,13 @@ namespace MvcCoreUtilidades.Controllers
 {
     public class UploadFilesController : Controller
     {
+        private IWebHostEnvironment hostEnvironment;
+
+        public UploadFilesController(IWebHostEnvironment hostEnvironment)
+        {
+            this.hostEnvironment = hostEnvironment;
+        }
+
         public IActionResult SubirFichero()
         {
             return View();
@@ -12,9 +19,8 @@ namespace MvcCoreUtilidades.Controllers
         [HttpPost]
         public async Task<IActionResult> SubirFichero(IFormFile fichero)
         {
-            // Aqui trabajaremos con Files, System.IO
-            // Comenzamos almacenando el fichero en una ruta temporal
-            string tempFolder = Path.GetTempPath();
+            // Ruta de nuestro server
+            string rootFolder = this.hostEnvironment.WebRootPath;
             string fileName = fichero.FileName;
             // Necesitamos la ruta física para escribir el fichero
             // La ruta es la combinación de tempFolder y fileName
@@ -22,8 +28,14 @@ namespace MvcCoreUtilidades.Controllers
             // /var/documents/temp/file1.txt
             // Cuando estemos hablando de files (System.IO) para
             // acceder a rutas, siempre debemos utilizar Path.Combine
-            string path = Path.Combine(tempFolder, fileName);
-
+            string path = Path.Combine(rootFolder, "uploads", fileName);
+            // Subimos el fichero utilizando Stream
+            using (Stream stream = new FileStream(path, FileMode.Create))
+            {
+                // Mediante IFormFile copiamos el contenido del fichero al stream
+                await fichero.CopyToAsync(stream);
+            }
+            ViewData["MENSAJE"] = "Fichero subido a " + path;
             return View();
         }
     }
