@@ -24,7 +24,7 @@ namespace MvcCoreUtilidades.Controllers
         public async Task<IActionResult> SendMail(string para, string asunto, string mensaje,
             IFormFile file)
         {
-            await this.helperMails.SendMail(para, asunto, mensaje, file);
+            await this.helperMails.SendMailAsync(para, asunto, mensaje, file);
             ViewData["MENSAJE"] = "Email enviado";
             return View();
         }

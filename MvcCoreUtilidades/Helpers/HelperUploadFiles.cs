@@ -9,12 +9,12 @@
             this.helperPathProvider = helperPathProvider;
         }
 
-        public async Task<string> UploadFileAsync(IFormFile file)
+        public async Task<string> UploadFileAsync(IFormFile file, Folders folder)
         {
             string fileName = file.FileName;
             // Recuperamos la ruta de nuestro fichero
             string path =
-                this.helperPathProvider.MapPath(fileName, Folders.Mails);
+                this.helperPathProvider.MapPath(fileName, folder);
             using (Stream stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

@@ -17,7 +17,7 @@ namespace MvcCoreUtilidades.Helpers
             this.helperUploadFiles = helperUploadFiles;
         }
 
-        public async Task SendMail
+        private async Task<MailMessage> ConfigureMailMessage
             (string para, string asunto, string mensaje, IFormFile file)
         {
             MailMessage mail = new MailMessage();
@@ -30,15 +30,21 @@ namespace MvcCoreUtilidades.Helpers
             mail.Body = mensaje;
             mail.IsBodyHtml = true;
             mail.Priority = MailPriority.Normal;
-
             // Si tiene attachment
             if (file != null)
             {
-                string path = await this.helperUploadFiles.UploadFileAsync(file);
+                string path =
+                    await this.helperUploadFiles.UploadFileAsync(file, Folders.Mails);
                 Attachment attachment = new Attachment(path);
                 mail.Attachments.Add(attachment);
             }
+            return mail;
+        }
 
+        private SmtpClient ConfigureSmtpClient()
+        {
+            string user = this.configuration.GetValue<string>
+                ("MailSettings:Credentials:User");
             string password = this.configuration.GetValue<string>
                 ("MailSettings:Credentials:Password");
             string hostName = this.configuration.GetValue<string>
@@ -58,6 +64,14 @@ namespace MvcCoreUtilidades.Helpers
             // Creamos las credenciales de red para enviar el mail
             NetworkCredential credentials = new NetworkCredential(user, password);
             smtpClient.Credentials = credentials;
+            return smtpClient;
+        }
+
+        public async Task SendMailAsync
+            (string para, string asunto, string mensaje, IFormFile file)
+        {
+            MailMessage mail = await ConfigureMailMessage(para, asunto, mensaje, file);
+            SmtpClient smtpClient = ConfigureSmtpClient();
             await smtpClient.SendMailAsync(mail);
         }
     }
