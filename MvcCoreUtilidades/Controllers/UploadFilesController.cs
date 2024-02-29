@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using MvcCoreUtilidades.Helpers;
 
 namespace MvcCoreUtilidades.Controllers
 {
     public class UploadFilesController : Controller
     {
-        private IWebHostEnvironment hostEnvironment;
+        private HelperPathProvider helperPathProvider;
 
-        public UploadFilesController(IWebHostEnvironment hostEnvironment)
+        public UploadFilesController(HelperPathProvider helperPathProvider)
         {
-            this.hostEnvironment = hostEnvironment;
+            this.helperPathProvider = helperPathProvider;
         }
 
         public IActionResult SubirFichero()
@@ -19,22 +21,14 @@ namespace MvcCoreUtilidades.Controllers
         [HttpPost]
         public async Task<IActionResult> SubirFichero(IFormFile fichero)
         {
-            // Ruta de nuestro server
-            string rootFolder = this.hostEnvironment.WebRootPath;
-            string fileName = fichero.FileName;
-            // Necesitamos la ruta física para escribir el fichero
-            // La ruta es la combinación de tempFolder y fileName
-            // C:\Documents\Temp\file1.txt
-            // /var/documents/temp/file1.txt
-            // Cuando estemos hablando de files (System.IO) para
-            // acceder a rutas, siempre debemos utilizar Path.Combine
-            string path = Path.Combine(rootFolder, "uploads", fileName);
+            string path = this.helperPathProvider.MapPath(fichero.FileName, Folders.Uploads);
             // Subimos el fichero utilizando Stream
             using (Stream stream = new FileStream(path, FileMode.Create))
             {
                 // Mediante IFormFile copiamos el contenido del fichero al stream
                 await fichero.CopyToAsync(stream);
             }
+            ViewData["URL"] = this.helperPathProvider.MapUrlPath(fichero.FileName, Folders.Uploads); ;
             ViewData["MENSAJE"] = "Fichero subido a " + path;
             return View();
         }

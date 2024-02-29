@@ -7,7 +7,10 @@
         Subir ficheros
     </button>
 </form>
-<img src="~/uploads/marte.jpg" style="width: 150px; height: 150px;" />
+<img src='@ViewData["URL"]' style="width: 150px; height: 150px;" />
+<h3 style="color:blue">
+    @ViewData["URL"]
+</h3>
 <h3 style="color:red">
     @ViewData["MENSAJE"]
 </h3>

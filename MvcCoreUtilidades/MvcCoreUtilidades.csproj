@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\mails\" />
+    <Folder Include="wwwroot\facturas\" />
+    <Folder Include="wwwroot\temp\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
