@@ -23,11 +23,21 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UploadFiles" asp-action="SubirFichero">Subir Fichero</a>
+                            <a class="nav-link text-dark" asp-controller="UploadFiles" asp-action="SubirFichero">Subir Fichero</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MailExample" asp-action="SendMail">
+                            <a class="nav-link text-dark" asp-controller="MailExample" asp-action="SendMail">
                                 Enviar Correo
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Cifrados" asp-action="CifradoBasico">
+                                Cifrado Básico
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Cifrados" asp-action="CifradoEficiente">
+                                Cifrado Eficiente
                             </a>
                         </li>
                     </ul>
