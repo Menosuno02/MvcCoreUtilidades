@@ -2,6 +2,9 @@ using MvcCoreUtilidades.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
