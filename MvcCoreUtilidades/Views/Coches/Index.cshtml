@@ -1,0 +1,36 @@
+﻿@section scripts {
+    <script>
+        $(function () {
+            $("#btnloadcoches").on("click", function () {
+                $("#contenidocoches").load("/Coches/_CochesPartial")
+            });
+
+            $("#btndetailscoches").on("click", function () {
+                let id = $("#cajaid").val();
+                // Si nuestro parámetro se llama id, lo enviamos con una /
+                // Controller/Action/ID
+                // Si el parámetro se llama de otra forma
+                // Controller/Action?param=valor
+                // Controller/Action?param1=valor1&param2=valor2
+                $("#detallescoche").load("/Coches/_DetailsCoche?idcoche=" + id);
+            });
+        });
+    </script>
+}
+
+<h1>Index Ajax Coches</h1>
+
+<button id="btnloadcoches" class="btn btn-info">
+    Load Coches AJAX
+</button>
+<div id="contenidocoches" style="background-color:lightgreen"></div>
+
+<br />
+
+<label class="form-label mt-3">ID Coche</label>
+<input class="form-control" type="text" id="cajaid" />
+<button id="btndetailscoches" class="btn btn-info mt-3">
+    Details Coche AJAX
+</button>
+
+<div id="detallescoche" style="background-color:lightpink"></div>
